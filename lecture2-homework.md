@@ -388,7 +388,129 @@ OUTPUT:
 
 ## 5. 判负 IsNegative
 
+```c
+pragma circom 2.1.4;
 
+include "circomlib/poseidon.circom";
+// include "https://github.com/0xPARC/circom-secp256k1/blob/master/circuits/bigint.circom";
+
+template Num2Bits(n) {
+    signal input in;
+    signal output out[n];
+    var lc1 = 0;
+    var e2 = 1;
+    for (var i = 0; i < n; i++) {
+        out[i] <-- (in >> i) & 1;
+        out[i] * (out[i] - 1) === 0;
+        lc1 += out[i] * e2;
+        e2 = e2 + e2;
+    }
+    log("lc1", lc1);
+    log("in", in);
+    lc1 === in;
+}
+
+// Returns 1 if in (in binary) > ct
+template CompConstant(ct) {
+    signal input in[254];
+    signal output out;
+
+    signal parts[127];
+    signal sout;
+
+    var clsb;
+    var cmsb;
+    var slsb;
+    var smsb;
+
+    var sum=0;
+
+    var b = (1 << 128) -1;
+    var a = 1;
+    var e = 1;
+    var i;
+
+    for (i=0;i<127; i++) {
+        clsb = (ct >> (i*2)) & 1;
+        cmsb = (ct >> (i*2+1)) & 1;
+        slsb = in[i*2];
+        smsb = in[i*2+1];
+
+        if ((cmsb==0)&&(clsb==0)) {
+            parts[i] <== -b*smsb*slsb + b*smsb + b*slsb;
+        } else if ((cmsb==0)&&(clsb==1)) {
+            parts[i] <== a*smsb*slsb - a*slsb + b*smsb - a*smsb + a;
+        } else if ((cmsb==1)&&(clsb==0)) {
+            parts[i] <== b*smsb*slsb - a*smsb + a;
+        } else {
+            parts[i] <== -a*smsb*slsb + a;
+        }
+
+        sum = sum + parts[i];
+
+        b = b -e;
+        a = a +e;
+        e = e*2;
+    }
+
+    sout <== sum;
+
+    component num2bits = Num2Bits(135);
+
+    num2bits.in <== sout;
+
+    out <== num2bits.out[127];
+}
+
+template Sign() {
+    signal input in;
+    signal output sign;
+    
+    component comp = CompConstant(10944121435919637611123202872628637544274182200208017171849102093287904247808);
+
+    component n2b = Num2Bits(254);
+    n2b.in <== in;
+
+    var i;
+    for (i=0; i<254; i++) {
+        comp.in[i] <== n2b.out[i];
+    }
+
+    sign <== comp.out;
+}
+
+component main=Sign();
+```
+
+### 5.1 输入负数
+
+```
+/* INPUT = {
+    "in": "10944121435919637611123202872628637544274182200208017171849102093287904247809"
+} */
+```
+
+```
+OUTPUT: 
+	sign = 1
+```
+
+### 5.2 输入正数
+
+```
+/* INPUT = {
+    "in": "10944121435919637611123202872628637544274182200208017171849102093287904247808"
+} */
+```
+
+```
+OUTPUT: 
+	sign = 0
+```
+
+### 5.3 为什么我们不能只使用 LessThan 或上一个练习中的比较器电路之一？
+
+如果使用 LessThan 在进行这一步计算的时候 `n2b.in <== in[0] + (1 << n) - in[1];` 会越界。
 
 ## 6. 少于 LessThan
 
