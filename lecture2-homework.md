@@ -157,8 +157,6 @@ FAIL:
 
 ## 第3题 相等 IsEqual
 
-### 3.1 实现1，利用IsZero
-
 ```c
 template IsEqual() {
     signal input in[2];
@@ -174,7 +172,7 @@ template IsEqual() {
 component main = IsEqual();
 ```
 
-#### 3.1.1 输入不等时
+### 3.1 输入不等时
 
 输入：
 
@@ -191,7 +189,7 @@ OUTPUT:
   out = 0
 ```
 
-#### 3.1.2 输入相等时
+### 3.2 输入相等时
 
 输入：
 
@@ -207,93 +205,6 @@ OUTPUT:
 OUTPUT: 
   out = 1
 ```
-
-### 3.2 实现2，课堂上的方法
-
-```c
-pragma circom 2.1.4;
-
-include "circomlib/poseidon.circom";
-// include "https://github.com/0xPARC/circom-secp256k1/blob/master/circuits/bigint.circom";
-
-template Num2Bits(n) {
-    signal input in;
-    signal output out[n];
-    var lc1 = 0;
-    var e2 = 1;
-    for (var i = 0; i < n; i++) {
-        out[i] <-- (in >> i) & 1;
-        out[i] * (out[i] - 1) === 0;
-        lc1 += out[i] * e2;
-        e2 = e2 + e2;
-    }
-    log("lc1", lc1);
-    log("in", in);
-    lc1 === in;
-}
-
-template IsEqual (n) {
-    signal input in[2];
-
-
-    signal inv;
-    in[0] + (2 ** n) - in[1] ==> inv;  // 这个数最大应该是 (2^(n) - 1) + 2^n - (2^(n-1)) = 1.5 * (2^n) - 1 < 2^(n + 1) - 1, 所以最大位数为 n + 1 
-
-    var nBits = n + 1;
-    component n2b = Num2Bits(nBits);
-    n2b.in <== inv;
-    signal output out0[nBits];
-    n2b.out ==> out0;
-    signal output out;
-    n2b.out[n] ==> out;
-}
-
-component main = IsEqual(3);
-```
-
-#### 3.2.1 输入不等
-
-输入：
-
-```
-/* INPUT = {
-    "in": ["7", "4"]
-} */
-```
-
-输出：
-
-```
-OUTPUT: 
-  out0[0] = 1
-  out0[1] = 1
-  out0[2] = 0
-  out0[3] = 1
-  out = 1
-```
-
-#### 3.2.2 输入不等2
-
-输入：
-
-```
-/* INPUT = {
-    "in": ["4", "7"]
-} */
-```
-
-输出：
-
-```
-OUTPUT: 
-  out0[0] = 1
-  out0[1] = 0
-  out0[2] = 1
-  out0[3] = 0
-out = 0
-```
-
-这个方法似乎行不通，或者这里的n和需要对比的数之间有个约束我没搞对？
 
 ## 4. 选择器 Selector
 
