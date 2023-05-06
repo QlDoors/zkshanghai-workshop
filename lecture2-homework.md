@@ -208,7 +208,7 @@ OUTPUT:
 
 ## 4. 选择器 Selector
 
-```
+```c
 pragma circom 2.1.4;
 
 include "circomlib/poseidon.circom";
@@ -256,9 +256,12 @@ template Selector(choices) {
     lessThan.in[0] <== index;
     lessThan.in[1] <== choices;
 
-    signal inv;
-    inv <-- lessThan.out == 1 ? in[index] : 0;
-    out <== inv;
+    signal element <-- lessThan.out * in[index];
+    0 === (1 - lessThan.out) * element;
+    signal outValue <-- 0;
+    signal a <== lessThan.out * element;
+    signal b <== (1 - lessThan.out) * outValue;
+    a + b ==> out;
 }
 
 component main=Selector(8);
