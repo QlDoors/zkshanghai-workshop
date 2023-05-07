@@ -244,10 +244,11 @@ template LessThan(n) {
     out1 <== n2b.out;
 }
 
-// 输出out应该等于in[index]。 如果 index 越界（不在 [0, nChoices) 中），out 应该是 0。
+// 输出out应该等于in[index]。 如果 index 越界（不在 [0, nChoices) 中），out 应该是 outrangeValue。
 template Selector(choices) {
     signal input in[choices];
     signal input index;
+    signal input outrangeValue;
     signal output out;
     
     assert(choices <= 15);
@@ -258,18 +259,10 @@ template Selector(choices) {
 
     signal element <-- lessThan.out * in[index];
     0 === (1 - lessThan.out) * element;
-    signal outValue <-- 0;
-    signal a <== lessThan.out * element;
-    signal b <== (1 - lessThan.out) * outValue;
-    a + b ==> out;
+    outrangeValue + (element - outrangeValue) * element ==> out;
 }
 
 component main=Selector(8);
-
-/* INPUT = {
-    "in": ["1", "2", "3", "4", "5", "6", "7", "8"],
-    "index": 9
-} */
 ```
 
 ### 4.1 输入不越界
@@ -277,7 +270,8 @@ component main=Selector(8);
 ```
 /* INPUT = {
     "in": ["1", "2", "3", "4", "5", "6", "7", "8"],
-    "index": 0
+    "index": 0,
+    "outrangeValue": 0
 } */
 ```
 
@@ -291,7 +285,8 @@ OUTPUT:
 ```
 /* INPUT = {
     "in": ["1", "2", "3", "4", "5", "6", "7", "8"],
-    "index": 9
+    "index": 9,
+    "outrangeValue": 0
 } */
 ```
 
