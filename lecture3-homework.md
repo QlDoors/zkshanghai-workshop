@@ -110,7 +110,7 @@ $s^2$至少有一个同余为自身，而$s^2$的平方根为$s$，所以：$QR(
 
 #### 结论
 
-由2.2和2.3可知，如果Prover遵守协议，Verifier会有1/2的概率拒绝请求。结合2.3，可以得出：无论Prover做什么，Verifier都会以$\geq 1 / 2$ 的概率拒绝。
+由2.2和2.3可知，如果Prover遵守协议，Verifier会有1/2的概率拒绝请求。结合2.1，可以得出：无论Prover做什么，Verifier都会以$\geq 1 / 2$ 的概率拒绝。
 
 
 
@@ -177,21 +177,71 @@ $$
 \tag{a} u = st \Rightarrow u^2 \bmod m = s^2t^2 \bmod m
 $$
 
-由 $s^{2} \equiv x \bmod m$, $\gcd(m, x)=1$ 可得：
+由 $s^{2} \equiv x \bmod m$, $\gcd(m, x)=1$ 可知：
 $$
-\tag{b} \exist 整数a使得s^2 = x + am
+\tag{b} s^2 = x
 $$
 将$(b)$代入$(a)$，可得：
 $$
 u^2 \bmod m = s^2t^2 \bmod m \\
-= (x+am)^2t^2 \bmod m \\
-= xt^2 \bmod m + (amt)^2 \bmod m \\
-\equiv xt^2 \bmod m =y \\
+= xt^2 \bmod m =y \\
 \Rightarrow y \equiv u^2 \bmod m
 $$
+#### 结论
+
 综合 1.1，1.2 完备性得证。
 
 ### 2. 可靠性
+
+#### 2.1 Prover 不遵守协议
+
+Prover 如果不遵守协议，对一个判定问题，他猜中的概率不会超过1/2。
+
+#### 2.2 Prover 遵守协议
+
+##### 2.2.1 $\text { if } b=0$
+
+由 $y=xt^2 $, $u=t$ 可得：$y=u^2x \bmod m \Rightarrow y \equiv u^2x\bmod m$，Verfier接受。
+
+##### 2.2.2 $\text { if } b=1$
+
+由题设$QR(m, x)=0$可知，不存在整数$s$使得 $s^{2} \equiv x \bmod m$成立，结合$\gcd(m, x)=1$可得：$s^2 \neq x$，所以：
+$$
+u^2 \bmod m = s^2t^2 \bmod m \\
+\neq xt^2 \bmod m =y \\
+\Rightarrow y \not\equiv u^2 \bmod m
+$$
+Verfier拒绝。
+
+#### 结论
+
+由2.2.1和2.2.2可知，如果Prover遵守协议，Verifier会有1/2的概率拒绝请求。结合2.1，可以得出：无论Prover做什么，Verifier都会以$\geq 1 / 2$ 的概率拒绝。
+
+### 3. 知识可靠性
+
+如果允许Verifier同时查询$b\in\{0,1\}$的两个值，那么Verfier会同时收到$u_1=t, u_2=st$。
+
+做一个简单的除法计算$u_2/u_1=st/t=s$即可提取出秘密$s$。
+
+### 4. 零知识
+
+假设我们设计了一个有时光倒流能力的模拟器，这个模拟器不知道秘密$s$。我们按下面步骤来进行交互：
+
+1. 模拟器在与 $m$ 互质的剩余中随机选择一个 $t \in \mathbb{Z}_{m}$。 Prover 将 $y \leftarrow x t^{2} \bmod m$ 发送给 Verifier。
+
+2. Verifier 抛硬币 $b \gets_R \{0,1\}$ 并将 $b$ 发送给 Prover。
+
+3. 模拟器收到 $b$ ，下面分两种情况进行讨论
+
+   3.1 $\text { if } b=0$
+
+   ​	根据完备性的证明，此时模拟器不用知道秘密$s$就可以把可以通过验证的$u$发送给Verifier。
+
+   3.2 $\text { if } b=1$
+
+   ​	3.2.1 由于模拟器不知道秘密$s$，所以无法发出正确的$st$，此时如果满足$u\in \mathbb{Z}_{m}，xt^2 \equiv u^2 \bmod m$的$u$存在，则将其发送给Verifier，通过验证。
+
+   ​    3.2.2 如果满足条件的$u$不存，启动时光机，修改$t$，使得满足条件的$u$存在，通过验证。
 
 
 
