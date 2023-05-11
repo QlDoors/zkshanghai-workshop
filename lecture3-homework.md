@@ -169,15 +169,7 @@ _目标_：证明者想要说服验证者 $QR(m, x)=1$ 而不透露有关 $s$ �
 
 #### 1.1 $\text { if } b=0$
 
-$$
-\begin{rcases}
-y=xt^2 \bmod m \\
-u=t \\
-\end{rcases} 
-\Rightarrow 
-y=u^2x \bmod m 
-\Rightarrow y \equiv u^2x\bmod m
-$$
+由 $y=xt^2 $, $u=t$ 可得：$y=u^2x \bmod m \Rightarrow y \equiv u^2x\bmod m$
 
 #### 1.2 $\text { if } b=1$
 
@@ -185,24 +177,17 @@ $$
 \tag{a} u = st \Rightarrow u^2 \bmod m = s^2t^2 \bmod m
 $$
 
+由 $s^{2} \equiv x \bmod m$, $\gcd(m, x)=1$ 可得：
 $$
-\tag{b}
-\begin{rcases}
-s^{2} \equiv x \bmod m \\
-\gcd(m, x)=1
-\end{rcases} \Rightarrow \exist 整数a使得s^2 = x + am
+\tag{b} \exist 整数a使得s^2 = x + am
 $$
-
 将$(b)$代入$(a)$，可得：
 $$
-\begin{align}
-u^2 \bmod m &= s^2t^2 \bmod m \\
-&= (x+am)^2t^2 \bmod m \\
-&= xt^2 \bmod m + (amt)^2 \bmod m \\
-&= xt^2 \bmod m \\
-&=y \\
-&\Rightarrow y \equiv u^2 \bmod m
-\end{align}
+u^2 \bmod m = s^2t^2 \bmod m \\
+= (x+am)^2t^2 \bmod m \\
+= xt^2 \bmod m + (amt)^2 \bmod m \\
+\equiv xt^2 \bmod m =y \\
+\Rightarrow y \equiv u^2 \bmod m
 $$
 综合 1.1，1.2 完备性得证。
 
