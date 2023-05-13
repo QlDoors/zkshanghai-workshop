@@ -87,6 +87,12 @@ $ npm run compile
    Feedback contract has been deployed to: 0xDefa9ACcA46d0a0420279381aB626b42AE26aEAf
    ```
 
+   拷贝 contract artifacts：
+
+   ```bash
+   $ npm run copy:contract-artifacts
+   ```
+
    把 Feedback contract 地址填入 .env
 
    ```bash
