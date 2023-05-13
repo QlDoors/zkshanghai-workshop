@@ -31,7 +31,7 @@ $ npm run compile
 1. Add your environment variables in the `.env` file.
 
    ```bash
-   DEFAULT_NETWORK=https://polygon-mumbai.infura.io/v3/
+   DEFAULT_NETWORK=maticmum
    INFURA_API_KEY=xxx
    ETHEREUM_PRIVATE_KEY=xxx
    FEEDBACK_CONTRACT_ADDRESS=
@@ -99,6 +99,8 @@ $ npm run compile
    $ cd ../../
    $ npm run dev:web-app 
    ```
+   
+   按页面提示操作。
 
 
 
