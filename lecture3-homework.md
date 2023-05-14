@@ -259,7 +259,17 @@ $$
 
 此练习表明确定性 Diffie-Hellman (DDH) 假设对于双线性自映射是错误的。
 
+### 解：
 
+$$
+\tag{a} e(\alpha \beta g, g) = e(\alpha g, \beta g)
+$$
+
+$$
+\tag{b} e(y,g)
+$$
+
+要判断$\alpha \beta = y$是否成立，只须判断 $a, b$ 两式是否相等即可。
 
 ## 第4题 BLS 签名聚合 BLS signature aggregation
 
