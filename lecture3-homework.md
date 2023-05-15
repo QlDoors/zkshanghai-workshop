@@ -305,3 +305,26 @@ $$
 注意：由于 _恶意公钥攻击_ ，上述签名聚合方案不安全。 使方案安全的一种方法是确保所有消息 $m_{i}$ 是不同的，例如，要求每个 $m_{i}$ 以用户的公钥 $pk_{i}$ 开头。
 
 有关 BLS 签名聚合的更多信息，请参阅 <https://crypto.stanford.edu/~dabo/pubs/papers/BLSmultisig.html>
+
+### 解：
+
+#### 1. 检查验证算法
+
+因为 $e(g_0, \sigma)=e(g_0,\alpha H(m))=e(\alpha g_0, H(m))=e(pk, H(m))$，所以验证算法始终能接受正确签名。
+
+#### 2. 论证伪造签名不可行
+
+攻击者想伪造签名，必须通过已知数据$\sigma, H(m), pk, g_0$计算出$\alpha$是困难的，是离散对数困难问题。 
+
+#### 3. 签名聚合
+
+$$
+e(g_0, \sigma)=e(g_0, \sigma_1+\sigma_2+\dots+\sigma_n) \\
+=e(g_0, \alpha_1H(m_1) + \alpha_2H(m_2)+\dots+\alpha_nH(m_n)) \\
+=e(g_0, \alpha_1H(m_1))*e(g_0, \alpha_2H(m_2))*\dots*e(g_0, \alpha_n H(m_n)) \\
+=e(\alpha_1 g_0, H(m_1))*e(\alpha_2 g_0, H(m_2))*\dots*e(\alpha_n g_0, H(m_n)) \\
+=e(pk_1, H(m_1))*e(pk_2, H(m_2))*\dots*e(pk_n, H(m_n))
+$$
+
+答案好像有误。
+
