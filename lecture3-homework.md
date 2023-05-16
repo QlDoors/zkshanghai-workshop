@@ -320,11 +320,11 @@ $$
 
 $$
 e(g_0, \sigma)=e(g_0, \sigma_1+\sigma_2+\dots+\sigma_n) \\
-=e(g_0, \alpha_1H(m_1) + \alpha_2H(m_2)+\dots+\alpha_nH(m_n)) \\
-=e(g_0, \alpha_1H(m_1))*e(g_0, \alpha_2H(m_2))*\dots*e(g_0, \alpha_n H(m_n)) \\
-=e(\alpha_1 g_0, H(m_1))*e(\alpha_2 g_0, H(m_2))*\dots*e(\alpha_n g_0, H(m_n)) \\
-=e(pk_1, H(m_1))*e(pk_2, H(m_2))*\dots*e(pk_n, H(m_n))
+=e(g_0, \alpha_1H(m_1)+\alpha_2H(m_2)+\dots+\alpha_nH(m_n)) \\
+=e(g_0, \alpha_1H(m_1))+e(g_0, \alpha_2H(m_2))+\dots+e(g_0, \alpha_n H(m_n)) \\
+=e(\alpha_1 g_0, H(m_1))+e(\alpha_2 g_0, H(m_2))+\dots+e(\alpha_n g_0, H(m_n)) \\
+=e(pk_1, H(m_1))+e(pk_2, H(m_2))+\dots+e(pk_n, H(m_n))
 $$
 
-答案好像有误。
+
 
